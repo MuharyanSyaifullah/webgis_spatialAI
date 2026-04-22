@@ -1,0 +1,29 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  padding: 1rem;
+  background: #656D3F;
+  color: white;
+  text-align: center;
+}
+
+main {
+  flex: 1;
+}
+
+header {
+  padding: 12px;
+  background: #656D3F;
+  color: white;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
