@@ -9,6 +9,7 @@ function MapView() {
 
   const [wilayah, setWilayah] = useState(null)
   const [fasilitas, setFasilitas] = useState(null)
+  const [detections, setDetections] = useState(null)
 
   const [formMode, setFormMode] = useState('add')
   const [selectedId, setSelectedId] = useState(null)
@@ -32,9 +33,20 @@ function MapView() {
     setFasilitas(res.data)
   }
 
+  const loadDetections = async () => {
+    try {
+      const res = await api.get('/api/detections/geojson')
+      console.log('DETECTIONS:', res.data)
+      setDetections(res.data)
+    } catch (error) {
+      console.error('Error load detections:', error)
+    }
+  }
+
   useEffect(() => {
     loadWilayah()
     loadFasilitas()
+    loadDetections()
   }, [])
 
   useEffect(() => {
@@ -135,7 +147,7 @@ function MapView() {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <div style={{ width: '320px', padding: '16px', background: '#f8f9fa', overflowY: 'auto' }}>
-        <h2>WebGIS Tugas 9</h2>
+        <h2>WebGIS Tugas 10</h2>
         <p><b>Muharyan Syaifullah</b></p>
         <p>123140045</p>
 
@@ -146,46 +158,11 @@ function MapView() {
         <h3>{formMode === 'add' ? 'Tambah Fasilitas' : 'Edit Fasilitas'}</h3>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <input
-            type="text"
-            placeholder="Nama"
-            value={nama}
-            onChange={(e) => setNama(e.target.value)}
-            required
-          />
-
-          <input
-            type="text"
-            placeholder="Jenis"
-            value={jenis}
-            onChange={(e) => setJenis(e.target.value)}
-            required
-          />
-
-          <textarea
-            placeholder="Alamat"
-            value={alamat}
-            onChange={(e) => setAlamat(e.target.value)}
-            required
-          />
-
-          <input
-            type="number"
-            step="any"
-            placeholder="Longitude"
-            value={longitude}
-            onChange={(e) => setLongitude(e.target.value)}
-            required
-          />
-
-          <input
-            type="number"
-            step="any"
-            placeholder="Latitude"
-            value={latitude}
-            onChange={(e) => setLatitude(e.target.value)}
-            required
-          />
+          <input type="text" placeholder="Nama" value={nama} onChange={(e) => setNama(e.target.value)} required />
+          <input type="text" placeholder="Jenis" value={jenis} onChange={(e) => setJenis(e.target.value)} required />
+          <textarea placeholder="Alamat" value={alamat} onChange={(e) => setAlamat(e.target.value)} required />
+          <input type="number" step="any" placeholder="Longitude" value={longitude} onChange={(e) => setLongitude(e.target.value)} required />
+          <input type="number" step="any" placeholder="Latitude" value={latitude} onChange={(e) => setLatitude(e.target.value)} required />
 
           <button type="submit">
             {formMode === 'add' ? 'Tambah' : 'Update'}
@@ -233,7 +210,6 @@ function MapView() {
               pointToLayer={pointToLayer}
               onEachFeature={(feature, layer) => {
                 const props = feature.properties
-
                 layer.bindPopup(`
                   <div>
                     <h3>${props.nama}</h3>
@@ -241,6 +217,32 @@ function MapView() {
                     <p><b>Alamat:</b> ${props.alamat ?? '-'}</p>
                     <button onclick="window.editFasilitas(${props.id})">Edit</button>
                     <button onclick="window.deleteFasilitas(${props.id})">Delete</button>
+                  </div>
+                `)
+              }}
+            />
+          )}
+
+          {detections && detections.features && detections.features.length > 0 && (
+            <GeoJSON
+              data={detections}
+              pointToLayer={(feature, latlng) => {
+                return L.circleMarker(latlng, {
+                  radius: 10,
+                  fillColor: 'blue',
+                  color: 'white',
+                  weight: 2,
+                  opacity: 1,
+                  fillOpacity: 0.9
+                })
+              }}
+              onEachFeature={(feature, layer) => {
+                const props = feature.properties
+                layer.bindPopup(`
+                  <div>
+                    <h3>Detection Result</h3>
+                    <p><b>Class:</b> ${props.class_name}</p>
+                    <p><b>Confidence:</b> ${props.confidence}</p>
                   </div>
                 `)
               }}

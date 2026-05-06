@@ -346,3 +346,30 @@ def delete_fasilitas(id: int, user: str = Depends(get_current_user)):
 
     if not deleted:
         raise HTTPException(status_code=404, detail="Fasilitas tidak ditemukan")
+    
+
+@app.get("/api/detections/geojson")
+def get_detections_geojson():
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT json_build_object(
+            'type', 'FeatureCollection',
+            'features', COALESCE(json_agg(
+                json_build_object(
+                    'type', 'Feature',
+                    'geometry', ST_AsGeoJSON(ST_Transform(geom, 4326))::json,
+                    'properties', json_build_object(
+                        'id', id,
+                        'class_name', class_name,
+                        'confidence', confidence,
+                        'detected_at', detected_at
+                    )
+                )
+            ), '[]'::json)
+        )
+        FROM detections
+        WHERE geom IS NOT NULL;
+    """)
+    data = cur.fetchone()[0]
+    cur.close()
+    return data

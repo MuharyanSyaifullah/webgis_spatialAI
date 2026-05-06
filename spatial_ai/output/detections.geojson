@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.811678,
+          -6.315336
+        ]
+      },
+      "properties": {
+        "id": 1,
+        "class_name": "car",
+        "confidence": 0.95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.8117,
+          -6.315378
+        ]
+      },
+      "properties": {
+        "id": 2,
+        "class_name": "car",
+        "confidence": 0.96
+      }
+    }
+  ]
+}
