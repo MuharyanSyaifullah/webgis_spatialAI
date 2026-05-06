@@ -4,7 +4,7 @@ import os
 
 IMAGE_PATH = "images/mobil2.jpg"
 OUTPUT_GEOJSON = "output/detections.geojson"
-OUTPUT_IMAGE = "output/detection_result.
+OUTPUT_IMAGE = "output/detection_result.jpg"
 MANUAL_DETECTIONS = [
     {"bbox": [330, 370, 435, 585], "class_name": "car", "confidence": 0.95},
     {"bbox": [465, 605, 560, 835], "class_name": "car", "confidence": 0.96}
