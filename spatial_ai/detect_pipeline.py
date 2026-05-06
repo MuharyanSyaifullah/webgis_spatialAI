@@ -4,16 +4,12 @@ import os
 
 IMAGE_PATH = "images/mobil2.jpg"
 OUTPUT_GEOJSON = "output/detections.geojson"
-OUTPUT_IMAGE = "output/detection_result.jpg"
-
-# Bounding box manual mobil pada gambar
+OUTPUT_IMAGE = "output/detection_result.
 MANUAL_DETECTIONS = [
     {"bbox": [330, 370, 435, 585], "class_name": "car", "confidence": 0.95},
     {"bbox": [465, 605, 560, 835], "class_name": "car", "confidence": 0.96}
 ]
 
-# Koordinat geografis manual agar muncul di peta WebGIS
-# Bisa kamu geser nanti kalau titiknya kurang pas
 MANUAL_GEO_POINTS = [
     {"lon": 106.811678, "lat": -6.315336},
     {"lon": 106.811700, "lat": -6.315378}
